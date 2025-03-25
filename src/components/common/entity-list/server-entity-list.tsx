@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ChevronUp, ChevronDown, PlusCircleIcon } from "lucide-react";
 import SearchComponent from "@/components/server-query-param/search";
+import OrderingComponent from "@/components/server-query-param/ordering";
 
 interface Column {
   key: string;
@@ -84,34 +85,8 @@ export default function ServerEntityList({
               )}
               {config.columns.map((col) => (
                 <th key={col.key} className="px-6 py-3">
-                  <a
-                    href={`?orderBy=${col.key}&direction=${
-                      orderBy === col.key && direction === "asc"
-                        ? "desc"
-                        : "asc"
-                    }`}
-                    className="flex items-center gap-2"
-                  >
-                    {col.name}
-                    {!col.hideSort && (
-                      <>
-                        <ChevronUp
-                          className={`h-4 w-4 ${
-                            orderBy === col.key && direction === "asc"
-                              ? "text-blue-500"
-                              : ""
-                          }`}
-                        />
-                        <ChevronDown
-                          className={`h-4 w-4 ${
-                            orderBy === col.key && direction === "desc"
-                              ? "text-blue-500"
-                              : ""
-                          }`}
-                        />
-                      </>
-                    )}
-                  </a>
+                  <span>{col.name}</span>
+                  {!col.hideSort && <OrderingComponent field={col.key} />}
                 </th>
               ))}
             </tr>

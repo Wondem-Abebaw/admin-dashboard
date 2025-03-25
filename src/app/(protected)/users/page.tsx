@@ -1,38 +1,25 @@
 import ServerEntityList from "@/components/common/entity-list/server-entity-list";
 import { serverCollectionQueryBuilder } from "@/utility/collection-builder/server-collection-query-builder";
 import { fetchData } from "@/utility/fetchData";
+import { orderBy } from "lodash-es";
 
 export async function getStaffs(
   searchParams: Record<string, string | string[] | undefined>
 ) {
   const params: Record<string, any> = {
-    skip: 0,
-    top: 10,
+    skip: searchParams.skip ? Number(searchParams.skip) : 0,
+    top: searchParams.top ? Number(searchParams.top) : 10,
+    // orderBy: searchParams.orderBy ?? [
+    //   { field: "createdAt", direction: "desc" },
+    // ],
+    ...searchParams, // Merge existing params
   };
 
-  // // Dynamically add params if they exist in searchParams
-  // if (searchParams?.search) params.search = searchParams.search.toString();
-  // if (searchParams?.orderBy) params.orderBy = searchParams.orderBy.toString();
-  // if (searchParams?.direction)
-  //   params.direction = searchParams.direction.toString();
-
-  // if (searchParams?.searchFrom) {
-  //   const searchFrom =
-  //     typeof searchParams.searchFrom === "string"
-  //       ? searchParams.searchFrom.split(",")
-  //       : Array.isArray(searchParams.searchFrom)
-  //       ? searchParams.searchFrom
-  //       : [searchParams.searchFrom.toString()];
-
-  //   searchFrom.forEach((field, index) => {
-  //     params[`searchFrom[${index}]`] = field;
-  //   });
-  // }
-
   console.log("params", params);
+
   return fetchData<{ data: any[]; count: number }>(
     "/users/get-users",
-    serverCollectionQueryBuilder(searchParams)
+    serverCollectionQueryBuilder(params)
   );
 }
 
@@ -42,7 +29,7 @@ export default async function StaffPage({
   searchParams: Record<string, string | string[] | undefined>;
 }) {
   const staffs = await getStaffs(searchParams);
-  console.log("searchParams", await searchParams);
+  console.log("searchParams", searchParams);
   console.log("staffs", staffs);
 
   return (

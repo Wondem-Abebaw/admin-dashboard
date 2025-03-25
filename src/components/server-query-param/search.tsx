@@ -30,7 +30,8 @@ export default function SearchComponent({
         params.set("searchFrom", searchFrom.join(","));
       }
     } else {
-      params.delete("query");
+      params.delete("search");
+      params.delete("searchFrom");
     }
     replace(`${pathname}?${params.toString()}`);
   }, 300);

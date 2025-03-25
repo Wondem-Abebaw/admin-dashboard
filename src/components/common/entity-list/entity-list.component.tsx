@@ -56,6 +56,7 @@ import {
 import { RootState } from "@/store/app.store";
 import { toast } from "sonner";
 import Spinner from "../spinner/spinner";
+import { MoveDownIcon, MoveUpIcon } from "lucide-react";
 
 type FunctionType = (args: any) => void;
 
@@ -555,8 +556,8 @@ export default function EntityList<T>(props: Props<T>) {
                           <div className="flex items-center gap-2">
                             <span>{col.name}</span>
                             {!col.hideSort && (
-                              <div className="flex flex-col">
-                                <ChevronUpIcon
+                              <div className="flex space-x-0">
+                                <MoveUpIcon
                                   className={`h-3 w-3 cursor-pointer ${
                                     order.field === col.key &&
                                     order.direction === "asc"
@@ -574,7 +575,7 @@ export default function EntityList<T>(props: Props<T>) {
                                     });
                                   }}
                                 />
-                                <ChevronDownIcon
+                                <MoveDownIcon
                                   className={`h-3 w-3 cursor-pointer ${
                                     order.field === col.key &&
                                     order.direction === "desc"
