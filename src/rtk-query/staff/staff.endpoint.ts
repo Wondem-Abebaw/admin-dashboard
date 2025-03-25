@@ -1,0 +1,26 @@
+export const STAFF_ENDPOINT = {
+  list: `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/get-users`,
+  create: `${process.env.NEXT_PUBLIC_API_BASE_URL}/staffs/create-staff`,
+  detail: `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/get-user`,
+  update: `${process.env.NEXT_PUBLIC_API_BASE_URL}/staffs/update-staff`,
+  delete: `${process.env.NEXT_PUBLIC_API_BASE_URL}/staffs/delete-staff`,
+  archive: `${process.env.NEXT_PUBLIC_API_BASE_URL}/staffs/archive-staff`,
+  toggleStatus: `${process.env.NEXT_PUBLIC_API_BASE_URL}/staffs/activate-or-block-staff`,
+  restore: `${process.env.NEXT_PUBLIC_API_BASE_URL}/staffs/restore-staff`,
+  add_role: `${process.env.NEXT_PUBLIC_API_BASE_URL}/staffs/add-staff-roles`,
+  staff_profile: `${process.env.NEXT_PUBLIC_API_BASE_URL}/staffs/get-my-profile`,
+  profile_upload: `${process.env.NEXT_PUBLIC_API_BASE_URL}/staffs/upload-picture`,
+  updateProfile: `${process.env.NEXT_PUBLIC_API_BASE_URL}/staffs/update-staff-profile-image/`,
+  archivedStaff: `${process.env.NEXT_PUBLIC_API_BASE_URL}/staffs/get-archived-staff`,
+
+  // added
+  roles: `${process.env.NEXT_PUBLIC_API_BASE_URL}/roles/get-roles`,
+  staff_role: `${process.env.NEXT_PUBLIC_API_BASE_URL}/accounts/get-user-roles`,
+  role_permissions_list: `${process.env.NEXT_PUBLIC_API_BASE_URL}/roles/get-role-permissions`,
+  add_account_role: `${process.env.NEXT_PUBLIC_API_BASE_URL}/accounts/add-account-role`,
+  add_account_role_permission: `${process.env.NEXT_PUBLIC_API_BASE_URL}/accounts/add-account-permission`,
+  staff_role_permissions: `${process.env.NEXT_PUBLIC_API_BASE_URL}/accounts/get-user-permissions-by-role-id`,
+  remove_account_role: `${process.env.NEXT_PUBLIC_API_BASE_URL}/accounts/remove-account-role`,
+  reset_staff_password: `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/reset-user-password`,
+  securiy_check: `${process.env.NEXT_PUBLIC_API_BASE_URL}/accounts/confirm-password`,
+};
