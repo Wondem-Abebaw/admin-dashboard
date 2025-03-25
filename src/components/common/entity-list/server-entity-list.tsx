@@ -1,6 +1,7 @@
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ChevronUp, ChevronDown, PlusCircleIcon } from "lucide-react";
-import Link from "next/link";
+import SearchComponent from "@/components/server-query-param/search";
 
 interface Column {
   key: string;
@@ -17,31 +18,29 @@ interface ServerEntityListProps {
   };
   items: any[];
   total: number;
-  orderBy: string;
-  direction: string;
   showNewButton?: boolean;
   newButtonText?: string;
   title: string;
-  header?: React.ReactNode;
+  searchFrom?: string[];
+  orderBy: string;
 }
 
 export default function ServerEntityList({
   config,
   items,
   total,
-  orderBy,
-  direction,
   showNewButton,
   newButtonText,
   title,
-  header,
+  searchFrom,
+  orderBy,
 }: ServerEntityListProps) {
   return (
     <div className="flex-col space-y-2 border p-2">
       <div className="flex  items-center h-10 justify-between font-semibold dark:text-white border">
         {title}
         <div className="flex h-full items-center space-x-4">
-          {header ?? "Header component"}
+          {/* {header ?? "Header component"} */}
         </div>
       </div>
 
@@ -65,7 +64,9 @@ export default function ServerEntityList({
         </div>
 
         <div className="flex justify-end space-x-2">
-          <div>Search component</div>
+          <div>
+            <SearchComponent searchFrom={searchFrom} />
+          </div>
           <div>filter component</div>
           <div>Reset filter component</div>
           {/* <div>Show selector component</div> */}

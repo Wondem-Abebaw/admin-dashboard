@@ -12,7 +12,7 @@ export const getKeyValue =
   <U extends keyof T, T extends object>(key: U) =>
   (obj: T) =>
     obj[key];
-export const collectionQueryBuilder = (
+export const serverCollectionQueryBuilder = (
   request: CollectionQuery,
   type: apiType = "ps"
 ) => {
@@ -30,11 +30,18 @@ export const collectionQueryBuilder = (
   if (request?.search !== undefined) {
     params?.set("search", request.search.toString());
   }
+  if (request?.searchFrom) {
+    console.log("request.searchFrom", request.searchFrom);
+    console.log("type.searchFrom", typeof request.searchFrom);
+    const searchFrom =
+      typeof request.searchFrom === "string"
+        ? request.searchFrom?.split(",")
+        : Array.isArray(request.searchFrom)
+        ? request.searchFrom
+        : [request.searchFrom?.toString()];
 
-  if (request?.searchFrom && request?.searchFrom?.length > 0) {
-    request?.searchFrom?.forEach((searchFrom, index) => {
-      // search from
-      params?.append(`searchFrom[${index}]`, searchFrom.toString());
+    searchFrom.forEach((field, index) => {
+      params.append(`searchFrom[${index}]`, field);
     });
   }
 
@@ -135,5 +142,5 @@ export const findById = (id: any, locale: string | undefined) => {
     ],
   };
 
-  return collectionQueryBuilder(request);
+  return serverCollectionQueryBuilder(request);
 };

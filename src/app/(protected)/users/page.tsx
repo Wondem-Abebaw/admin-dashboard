@@ -1,64 +1,58 @@
 import ServerEntityList from "@/components/common/entity-list/server-entity-list";
-import { cookies } from "next/headers";
+import { serverCollectionQueryBuilder } from "@/utility/collection-builder/server-collection-query-builder";
+import { fetchData } from "@/utility/fetchData";
 
-export async function getStaffs(ctx, { orderBy, direction, page }) {
-  const cookieStore = await cookies();
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL; // The base URL from env variable
-  const url = `/users/get-users?skip=0&top=10`; // Relative URL
-  const method = "GET"; // HTTP method for the request
+export async function getStaffs(
+  searchParams: Record<string, string | string[] | undefined>
+) {
+  const params: Record<string, any> = {
+    skip: 0,
+    top: 10,
+  };
 
-  // Ensure baseUrl is defined
-  if (!baseUrl) {
-    throw new Error("API Base URL is missing.");
-  }
+  // // Dynamically add params if they exist in searchParams
+  // if (searchParams?.search) params.search = searchParams.search.toString();
+  // if (searchParams?.orderBy) params.orderBy = searchParams.orderBy.toString();
+  // if (searchParams?.direction)
+  //   params.direction = searchParams.direction.toString();
 
-  // Get the access token from cookies
+  // if (searchParams?.searchFrom) {
+  //   const searchFrom =
+  //     typeof searchParams.searchFrom === "string"
+  //       ? searchParams.searchFrom.split(",")
+  //       : Array.isArray(searchParams.searchFrom)
+  //       ? searchParams.searchFrom
+  //       : [searchParams.searchFrom.toString()];
 
-  const accessToken = cookieStore.get("accessToken")?.value;
-  console.log("accToken", accessToken);
-  // console.log("refreshToken", Cookies.get("refreshToken"));
-  // console.log("CurrentRole", Cookies.get("currentRole"));
+  //   searchFrom.forEach((field, index) => {
+  //     params[`searchFrom[${index}]`] = field;
+  //   });
+  // }
 
-  if (!accessToken) {
-    throw new Error("Access token is missing or expired.");
-  }
-
-  const res = await fetch(baseUrl + url, {
-    method: method,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`, // Use the token from cookies
-    },
-    cache: "no-store", // Disable caching
-  });
-  console.log("fetchres", res);
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch staff data");
-  }
-
-  return res.json();
+  console.log("params", params);
+  return fetchData<{ data: any[]; count: number }>(
+    "/users/get-users",
+    serverCollectionQueryBuilder(searchParams)
+  );
 }
 
 export default async function StaffPage({
   searchParams,
 }: {
-  searchParams: any;
+  searchParams: Record<string, string | string[] | undefined>;
 }) {
-  const orderBy = searchParams?.orderBy || "name";
-  const direction = searchParams?.direction || "asc";
-  const page = Number(searchParams?.page) || 1;
-
-  const staffs = await getStaffs(null, { orderBy, direction, page });
+  const staffs = await getStaffs(searchParams);
+  console.log("searchParams", await searchParams);
+  console.log("staffs", staffs);
 
   return (
     <ServerEntityList
       config={{
         rootUrl: "/users",
-        selectable: false, // Show checkboxes
+        selectable: false,
         columns: [
           { key: "name", name: "Full Name" },
-          { key: "email", name: "Email", hideSort: true }, // No sorting for emails
+          { key: "email", name: "Email", hideSort: true },
           {
             key: "createdAt",
             name: "Registered At",
@@ -67,10 +61,11 @@ export default async function StaffPage({
         ],
       }}
       items={staffs.data}
-      total={staffs.total}
+      total={staffs.count}
       showNewButton={true}
       newButtonText="Add User"
       title="Users"
+      searchFrom={["name", "phoneNumber"]}
     />
   );
 }
