@@ -4,6 +4,8 @@ import { ChevronUp, ChevronDown, PlusCircleIcon } from "lucide-react";
 import SearchComponent from "@/components/server-query-param/search";
 import SortingComponent from "@/components/server-query-param/Sorting";
 import ShowArchivedComponent from "@/components/server-query-param/show-archived";
+import EmptyIcon from "../empty-icon/empty-icon";
+import ServerPaginationComponent from "@/components/server-query-param/server-pagination";
 
 interface Column {
   key: string;
@@ -20,6 +22,8 @@ interface ServerEntityListProps {
   };
   items: any[];
   total: number;
+  defaultSkip: number;
+  defaultTop: number;
   showNewButton?: boolean;
   newButtonText?: string;
   title: string;
@@ -40,6 +44,8 @@ export default function ServerEntityList({
   orderBy,
   header,
   filterComponent,
+  defaultSkip,
+  defaultTop,
 }: ServerEntityListProps) {
   return (
     <div className="flex-col space-y-2 border p-2 text-sm">
@@ -118,6 +124,21 @@ export default function ServerEntityList({
             ))}
           </tbody>
         </table>
+        {total > 0 && (
+          <div className="flex justify-end p-2 w-full">
+            <ServerPaginationComponent
+              total={total}
+              title={title}
+              defaultSkip={defaultSkip}
+              defaultTop={defaultTop}
+            />
+          </div>
+        )}
+        {!items?.length && (
+          <div className="w-full flex justify-center items-center h-56">
+            <EmptyIcon />
+          </div>
+        )}
       </div>
     </div>
   );

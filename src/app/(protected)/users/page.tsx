@@ -2,15 +2,24 @@
 import ServerEntityList from "@/components/common/entity-list/server-entity-list";
 import UserFilterComponent from "@/components/server-query-param/filter/user-filter";
 import ShowArchivedComponent from "@/components/server-query-param/show-archived";
+import { Collection, CollectionQuery } from "@/models/collection.model";
+import { collectionQueryBuilder } from "@/utility/collection-builder/collection-query-builder";
 import { serverCollectionQueryBuilder } from "@/utility/collection-builder/server-collection-query-builder";
 import { fetchData } from "@/utility/fetchData";
 import dateFormat from "dateformat";
 import { CheckIcon, MinusIcon } from "lucide-react";
-
+const defaultCollections: CollectionQuery = {
+  skip: 0,
+  top: 10,
+  orderBy: [{ field: "createdAt", direction: "desc" }],
+};
 export async function getStaffs(searchParams: Record<string, string>) {
   const params = new URLSearchParams();
-  params.set("skip", "0");
-  params.set("top", "10");
+  const newParams = collectionQueryBuilder(defaultCollections);
+
+  newParams.forEach((value, key) => {
+    params.set(key, value);
+  });
 
   // Convert searchParams object into URLSearchParams format
   Object.entries(searchParams).forEach(([key, value]) => {
@@ -56,6 +65,8 @@ export default async function StaffPage(props: { searchParams?: any }) {
       }}
       items={staffs.data}
       total={staffs.count}
+      defaultSkip={defaultCollections?.skip}
+      defaultTop={defaultCollections?.top}
       showNewButton={true}
       newButtonText="Add User"
       title="Users"
