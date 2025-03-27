@@ -1,6 +1,7 @@
 "use server";
 import ServerEntityList from "@/components/common/entity-list/server-entity-list";
 import UserFilterComponent from "@/components/server-query-param/filter/user-filter";
+import ShowArchivedComponent from "@/components/server-query-param/show-archived";
 import { serverCollectionQueryBuilder } from "@/utility/collection-builder/server-collection-query-builder";
 import { fetchData } from "@/utility/fetchData";
 import dateFormat from "dateformat";

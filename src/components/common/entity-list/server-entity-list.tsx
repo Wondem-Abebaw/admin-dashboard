@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronUp, ChevronDown, PlusCircleIcon } from "lucide-react";
 import SearchComponent from "@/components/server-query-param/search";
 import SortingComponent from "@/components/server-query-param/Sorting";
+import ShowArchivedComponent from "@/components/server-query-param/show-archived";
 
 interface Column {
   key: string;
@@ -44,8 +45,9 @@ export default function ServerEntityList({
     <div className="flex-col space-y-2 border p-2 text-sm">
       <div className="flex  items-center h-10 justify-between font-semibold dark:text-white border">
         {title}
-        <div className="flex h-full items-center space-x-4">
-          {header ?? "Header component"}
+        <div className="flex h-full items-center space-x-3">
+          <div> {header ?? "Header component"}</div>
+          {<ShowArchivedComponent />}
         </div>
       </div>
 
