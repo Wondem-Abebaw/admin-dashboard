@@ -32,7 +32,11 @@ export default function SearchComponent({
       });
     } else {
       params.delete("search");
-      params.delete("searchFrom");
+      Array.from(params.keys()).forEach((key) => {
+        if (key.startsWith("searchFrom")) {
+          params.delete(key);
+        }
+      });
     }
 
     replace(`${pathname}?${params.toString()}`);

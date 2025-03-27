@@ -34,8 +34,15 @@ export default function UserFilterComponent() {
   };
   const resetFilter = () => {
     setFilterValue([]);
-    params.delete("filter");
-    replace(`${pathname}?${params?.toString()}`);
+
+    // Remove all filter-related parameters
+    Array.from(params.keys()).forEach((key) => {
+      if (key.startsWith("filter")) {
+        params.delete(key);
+      }
+    });
+
+    replace(`${pathname}?${params.toString()}`);
   };
 
   const filterQuery = (data: string[]) => {
