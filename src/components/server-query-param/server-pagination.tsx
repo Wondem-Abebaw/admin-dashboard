@@ -48,6 +48,7 @@ export default function ServerPaginationComponent({
 
   const totalPages = Math.ceil(total / top);
   const currentPage = Math.floor(skip / top) + 1;
+  console.log("totalPages", totalPages);
 
   useEffect(() => {
     setSkip(parseInt(params.get("skip") || `${defaultSkip}`, 10));
@@ -112,7 +113,9 @@ export default function ServerPaginationComponent({
           {/* Ellipsis for large sets */}
           {totalPages > 5 && (
             <>
-              <PaginationEllipsis />
+              <PaginationItem>
+                <PaginationEllipsis />
+              </PaginationItem>
               <PaginationItem>
                 <PaginationLink onClick={() => handlePageChange(totalPages)}>
                   {totalPages}

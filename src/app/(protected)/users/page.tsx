@@ -27,7 +27,10 @@ export async function getStaffs(searchParams: Record<string, string>) {
   });
 
   console.log("updated2222:", params);
-  return fetchData<{ data: any[]; count: number }>("/users/get-users", params);
+  return fetchData<{ data: any[]; count: number }>(
+    "/employers/get-employers",
+    params
+  );
 }
 
 export default async function StaffPage(props: { searchParams?: any }) {

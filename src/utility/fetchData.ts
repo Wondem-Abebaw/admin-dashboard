@@ -27,16 +27,16 @@ export async function fetchData<T>(
       "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
     },
-    cache: "no-store",
+    cache: "force-cache",
   });
 
   if (!response.ok) {
     throw new Error(`Failed to fetch: ${response.statusText}`);
   }
 
-  const data = await response.json(); // ✅ Read response only once
+  const data = await response.json();
 
-  console.log("response", data); // ✅ Log the parsed JSON, not response.json()
+  console.log("response", data);
 
-  return data; // ✅ Return the parsed JSON
+  return data;
 }
