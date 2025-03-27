@@ -1,5 +1,6 @@
 "use client";
 
+import { collectionQueryBuilder } from "@/utility/collection-builder/collection-query-builder";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { SearchIcon } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -18,21 +19,22 @@ export default function SearchComponent({
   // console.log("searchParams", searchParams);
   console.log("pathname", pathname);
   const handleSearch = useDebouncedCallback((term: string) => {
-    console.log(`Searching... ${term}`);
-
     const params = new URLSearchParams(searchParams);
 
-    params.set("page", "1");
-
     if (term) {
-      params?.set("search", term.toString());
-      if (searchFrom && searchFrom.length > 0) {
-        params.set("searchFrom", searchFrom.join(","));
-      }
+      const newParams = collectionQueryBuilder({
+        search: term,
+        searchFrom: searchFrom,
+      });
+
+      newParams.forEach((value, key) => {
+        params.set(key, value);
+      });
     } else {
       params.delete("search");
       params.delete("searchFrom");
     }
+
     replace(`${pathname}?${params.toString()}`);
   }, 300);
 

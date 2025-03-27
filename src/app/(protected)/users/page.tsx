@@ -1,35 +1,29 @@
+"use server";
 import ServerEntityList from "@/components/common/entity-list/server-entity-list";
+import UserFilterComponent from "@/components/server-query-param/filter/user-filter";
 import { serverCollectionQueryBuilder } from "@/utility/collection-builder/server-collection-query-builder";
 import { fetchData } from "@/utility/fetchData";
-import { orderBy } from "lodash-es";
+import dateFormat from "dateformat";
+import { CheckIcon, MinusIcon } from "lucide-react";
 
-export async function getStaffs(
-  searchParams: Record<string, string | string[] | undefined>
-) {
-  const params: Record<string, any> = {
-    skip: searchParams.skip ? Number(searchParams.skip) : 0,
-    top: searchParams.top ? Number(searchParams.top) : 10,
-    // orderBy: searchParams.orderBy ?? [
-    //   { field: "createdAt", direction: "desc" },
-    // ],
-    ...searchParams, // Merge existing params
-  };
+export async function getStaffs(searchParams: Record<string, string>) {
+  const params = new URLSearchParams();
+  params.set("skip", "0");
+  params.set("top", "10");
 
-  console.log("params", params);
+  // Convert searchParams object into URLSearchParams format
+  Object.entries(searchParams).forEach(([key, value]) => {
+    params.set(key, value);
+  });
 
-  return fetchData<{ data: any[]; count: number }>(
-    "/users/get-users",
-    serverCollectionQueryBuilder(params)
-  );
+  console.log("updated2222:", params);
+  return fetchData<{ data: any[]; count: number }>("/users/get-users", params);
 }
 
-export default async function StaffPage({
-  searchParams,
-}: {
-  searchParams: Record<string, string | string[] | undefined>;
-}) {
+export default async function StaffPage(props: { searchParams?: any }) {
+  const searchParams = (await props.searchParams) ?? new URLSearchParams();
   const staffs = await getStaffs(searchParams);
-  console.log("searchParams", searchParams);
+  // console.log("searchParams", searchParams);
   console.log("staffs", staffs);
 
   return (
@@ -40,10 +34,22 @@ export default async function StaffPage({
         columns: [
           { key: "name", name: "Full Name" },
           { key: "email", name: "Email", hideSort: true },
+          { key: "gender", name: "Gender", hideSort: true },
           {
             key: "createdAt",
             name: "Registered At",
-            render: (staff) => new Date(staff.createdAt).toLocaleDateString(),
+            render: (staff) =>
+              dateFormat(staff.createdAt, "ddd, mmm d, yyyy, h:MM TT"),
+          },
+          {
+            key: "enabled",
+            name: "Status",
+            render: (staff) =>
+              staff.enabled ? (
+                <CheckIcon className="h-5 w-5 text-green-500" />
+              ) : (
+                <MinusIcon className="h-5 w-5 text-red-500" />
+              ),
           },
         ],
       }}
@@ -53,6 +59,7 @@ export default async function StaffPage({
       newButtonText="Add User"
       title="Users"
       searchFrom={["name", "phoneNumber"]}
+      filterComponent={<UserFilterComponent />}
     />
   );
 }

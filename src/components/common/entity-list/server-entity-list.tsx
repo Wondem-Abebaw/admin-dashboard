@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ChevronUp, ChevronDown, PlusCircleIcon } from "lucide-react";
 import SearchComponent from "@/components/server-query-param/search";
-import OrderingComponent from "@/components/server-query-param/ordering";
+import SortingComponent from "@/components/server-query-param/Sorting";
 
 interface Column {
   key: string;
@@ -24,6 +24,8 @@ interface ServerEntityListProps {
   title: string;
   searchFrom?: string[];
   orderBy: string;
+  header?: React.ReactNode;
+  filterComponent?: React.ReactNode;
 }
 
 export default function ServerEntityList({
@@ -35,13 +37,15 @@ export default function ServerEntityList({
   title,
   searchFrom,
   orderBy,
+  header,
+  filterComponent,
 }: ServerEntityListProps) {
   return (
-    <div className="flex-col space-y-2 border p-2">
+    <div className="flex-col space-y-2 border p-2 text-sm">
       <div className="flex  items-center h-10 justify-between font-semibold dark:text-white border">
         {title}
         <div className="flex h-full items-center space-x-4">
-          {/* {header ?? "Header component"} */}
+          {header ?? "Header component"}
         </div>
       </div>
 
@@ -68,8 +72,8 @@ export default function ServerEntityList({
           <div>
             <SearchComponent searchFrom={searchFrom} />
           </div>
-          <div>filter component</div>
-          <div>Reset filter component</div>
+          <div>{filterComponent ?? ""}</div>
+          {/* <div>Reset filter component</div> */}
           {/* <div>Show selector component</div> */}
         </div>
       </div>
@@ -84,9 +88,13 @@ export default function ServerEntityList({
                 </th>
               )}
               {config.columns.map((col) => (
-                <th key={col.key} className="px-6 py-3">
-                  <span>{col.name}</span>
-                  {!col.hideSort && <OrderingComponent field={col.key} />}
+                <th key={col.key} className="px-6 py-3 ">
+                  <div className="flex items-center">
+                    <div>{col.name}</div>
+                    <div>
+                      {!col.hideSort && <SortingComponent field={col.key} />}
+                    </div>
+                  </div>
                 </th>
               ))}
             </tr>

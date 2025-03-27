@@ -1,14 +1,13 @@
 "use client";
 
+import { collectionQueryBuilder } from "@/utility/collection-builder/collection-query-builder";
 import { MoveDownIcon, MoveUpIcon } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-export default function OrderingComponent({ field }: { field: string }) {
+export default function SortingComponent({ field }: { field: string }) {
   const searchParams = useSearchParams();
   const { replace } = useRouter();
   const pathname = usePathname();
-
-  console.log("searchParams ordering", searchParams);
 
   // Parse existing orderBy param as an array
   const currentOrderBy = searchParams.get("orderBy");
@@ -29,15 +28,19 @@ export default function OrderingComponent({ field }: { field: string }) {
   const setSorting = (direction: "asc" | "desc") => {
     const params = new URLSearchParams(searchParams);
 
-    const newOrderBy = [{ field: field, direction: direction }];
+    const newParams = collectionQueryBuilder({
+      orderBy: [{ field: field, direction: direction }],
+    });
 
-    params.set("orderBy", JSON.stringify(newOrderBy));
+    newParams.forEach((value, key) => {
+      params.set(key, value);
+    });
 
-    replace(`${pathname}?${params.toString()}`);
+    replace(`${pathname}?${params?.toString()}`);
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex space-x-0">
       <MoveUpIcon
         className={`h-3 w-3 cursor-pointer ${
           currentDirection === "asc" ? "text-blue-500" : "text-gray-500"

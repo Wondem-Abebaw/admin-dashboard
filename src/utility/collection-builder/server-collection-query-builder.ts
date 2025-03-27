@@ -44,7 +44,8 @@ export const serverCollectionQueryBuilder = (
       params.append(`searchFrom[${index}]`, field);
     });
   }
-
+  console.log("requesttt", request);
+  console.log("req.orderBy", request.orderBy);
   if (request?.orderBy && request?.orderBy?.length > 0) {
     request?.orderBy?.forEach((orderBy, index) => {
       Object.keys(orderBy)?.forEach((key: any) => {
