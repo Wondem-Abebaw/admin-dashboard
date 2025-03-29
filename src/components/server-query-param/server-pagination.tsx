@@ -92,7 +92,7 @@ export default function ServerPaginationComponent({
   return (
     <div className="flex items-center space-x-4">
       {/* Show range info */}
-      <span className="text-sm w-full">
+      <span className="text-sm w-full flex flex-nowrap">
         {skip + 1}-{Math.min(skip + top, total)} of {total} {title}
       </span>
 

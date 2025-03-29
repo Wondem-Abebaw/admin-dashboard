@@ -1,6 +1,4 @@
 "use client";
-
-import { collectionQueryBuilder } from "@/utility/collection-builder/collection-query-builder";
 import { MoveDownIcon, MoveUpIcon } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
@@ -9,34 +7,38 @@ export default function SortingComponent({ field }: { field: string }) {
   const { replace } = useRouter();
   const pathname = usePathname();
 
-  // Parse existing orderBy param as an array
-  const currentOrderBy = searchParams.get("orderBy");
+  // Parse orderBy manually
   let parsedOrderBy: { field: string; direction: "asc" | "desc" }[] = [];
+  let index = 0;
 
-  if (currentOrderBy) {
-    try {
-      parsedOrderBy = JSON.parse(currentOrderBy);
-    } catch (error) {
-      console.error("Error parsing orderBy:", error);
-    }
+  while (searchParams.get(`orderBy[${index}][field]`)) {
+    parsedOrderBy.push({
+      field: searchParams.get(`orderBy[${index}][field]`) as string,
+      direction: searchParams.get(`orderBy[${index}][direction]`) as
+        | "asc"
+        | "desc",
+    });
+    index++;
   }
 
-  // Find the current order field
+  console.log("Parsed OrderBy:", parsedOrderBy);
+
+  // Find the current field's sorting state
   const currentOrder = parsedOrderBy.find((o) => o.field === field);
   const currentDirection = currentOrder?.direction || "";
 
+  // Function to update sorting
   const setSorting = (direction: "asc" | "desc") => {
     const params = new URLSearchParams(searchParams);
 
-    const newParams = collectionQueryBuilder({
-      orderBy: [{ field: field, direction: direction }],
-    });
+    // Reset orderBy with only the selected field
+    params.delete("orderBy[0][field]");
+    params.delete("orderBy[0][direction]");
 
-    newParams.forEach((value, key) => {
-      params.set(key, value);
-    });
+    params.set("orderBy[0][field]", field);
+    params.set("orderBy[0][direction]", direction);
 
-    replace(`${pathname}?${params?.toString()}`);
+    replace(`${pathname}?${params.toString()}`);
   };
 
   return (

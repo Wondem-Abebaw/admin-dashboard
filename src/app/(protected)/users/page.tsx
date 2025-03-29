@@ -27,10 +27,7 @@ export async function getStaffs(searchParams: Record<string, string>) {
   });
 
   console.log("updated2222:", params);
-  return fetchData<{ data: any[]; count: number }>(
-    "/employers/get-employers",
-    params
-  );
+  return fetchData<{ data: any[]; count: number }>("/users/get-users", params);
 }
 
 export default async function StaffPage(props: { searchParams?: any }) {
@@ -48,21 +45,23 @@ export default async function StaffPage(props: { searchParams?: any }) {
           { key: "name", name: "Full Name" },
           { key: "email", name: "Email", hideSort: true },
           { key: "gender", name: "Gender", hideSort: true },
+          { key: ["emergencyContact", "name"], name: "Emergecy Contact" },
           {
             key: "createdAt",
             name: "Registered At",
-            render: (staff) =>
-              dateFormat(staff.createdAt, "ddd, mmm d, yyyy, h:MM TT"),
+            isDate: true,
+            // render: (staff) =>
+            //   dateFormat(staff.createdAt, "ddd, mmm d, yyyy, h:MM TT"),
           },
           {
             key: "enabled",
             name: "Status",
-            render: (staff) =>
-              staff.enabled ? (
-                <CheckIcon className="h-5 w-5 text-green-500" />
-              ) : (
-                <MinusIcon className="h-5 w-5 text-red-500" />
-              ),
+            // render: (staff) =>
+            //   staff.enabled ? (
+            //     <CheckIcon className="h-5 w-5 text-green-500" />
+            //   ) : (
+            //     <MinusIcon className="h-5 w-5 text-red-500" />
+            //   ),
           },
         ],
       }}

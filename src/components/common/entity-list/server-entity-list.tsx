@@ -1,16 +1,25 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ChevronUp, ChevronDown, PlusCircleIcon } from "lucide-react";
+import {
+  ChevronUp,
+  ChevronDown,
+  PlusCircleIcon,
+  CheckIcon,
+  MinusIcon,
+  Ellipsis,
+} from "lucide-react";
 import SearchComponent from "@/components/server-query-param/search";
 import SortingComponent from "@/components/server-query-param/Sorting";
 import ShowArchivedComponent from "@/components/server-query-param/show-archived";
 import EmptyIcon from "../empty-icon/empty-icon";
 import ServerPaginationComponent from "@/components/server-query-param/server-pagination";
+import dateFormat from "dateformat";
 
 interface Column {
-  key: string;
+  key: string | string[];
   name: string;
   hideSort?: boolean;
+  isDate?: boolean;
   render?: (item: any) => React.ReactNode;
 }
 
@@ -47,6 +56,18 @@ export default function ServerEntityList({
   defaultSkip,
   defaultTop,
 }: ServerEntityListProps) {
+  const childeView = (item: any, keys: string[]) => {
+    if (keys.length && item) {
+      keys.forEach((key: any) => {
+        if (item[key] !== null && item[key] !== undefined) {
+          item = item[key];
+        } else {
+          item = "";
+        }
+      });
+    }
+    return item;
+  };
   return (
     <div className="flex-col space-y-2 border p-2 text-sm">
       <div className="flex  items-center h-10 justify-between font-semibold dark:text-white border">
@@ -96,11 +117,11 @@ export default function ServerEntityList({
                 </th>
               )}
               {config.columns.map((col) => (
-                <th key={col.key} className="px-6 py-3 ">
+                <th key={col?.key} className="px-6 py-3 ">
                   <div className="flex items-center">
                     <div>{col.name}</div>
                     <div>
-                      {!col.hideSort && <SortingComponent field={col.key} />}
+                      {!col.hideSort && <SortingComponent field={col?.key} />}
                     </div>
                   </div>
                 </th>
@@ -117,7 +138,27 @@ export default function ServerEntityList({
                 )}
                 {config.columns.map((col) => (
                   <td key={col.key} className="px-6 py-4">
-                    {col.render ? col.render(item) : item[col.key]}
+                    {col.render ? (
+                      col.render(item)
+                    ) : !Array.isArray(col.key) ? (
+                      typeof item[col.key] === "boolean" ? (
+                        item[col.key] ? (
+                          <CheckIcon className="h-5 w-5 text-green-500" />
+                        ) : (
+                          <MinusIcon className="h-5 w-5 text-red-400" />
+                        )
+                      ) : col.isDate ? (
+                        item[col.key] !== null ? (
+                          dateFormat(item[col.key], "ddd, mmm d, yyyy, h:MM TT")
+                        ) : (
+                          <Ellipsis className="h-4 w-4 text-gray-700" />
+                        )
+                      ) : (
+                        item[col.key]
+                      )
+                    ) : (
+                      childeView(item, col.key)
+                    )}
                   </td>
                 ))}
               </tr>
