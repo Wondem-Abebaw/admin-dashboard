@@ -1,5 +1,5 @@
 export const STAFF_ENDPOINT = {
-  list: `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/get-users`,
+  list: `${process.env.NEXT_PUBLIC_API_BASE_URL}/employers/get-employers`,
   create: `${process.env.NEXT_PUBLIC_API_BASE_URL}/staffs/create-staff`,
   detail: `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/get-user`,
   update: `${process.env.NEXT_PUBLIC_API_BASE_URL}/staffs/update-staff`,

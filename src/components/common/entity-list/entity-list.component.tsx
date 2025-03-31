@@ -57,6 +57,7 @@ import { RootState } from "@/store/app.store";
 import { toast } from "sonner";
 import Spinner from "../spinner/spinner";
 import { MoveDownIcon, MoveUpIcon } from "lucide-react";
+import ClientPaginationComponent from "../client-pagination/client-pagination";
 
 type FunctionType = (args: any) => void;
 
@@ -72,6 +73,7 @@ interface Props<T> {
   showSelector?: boolean;
   viewMode: entityViewMode;
   collectionQuery?: CollectionQuery;
+  setCollection?: FunctionType;
   items?: any;
   selectedItem?: any;
   itemsLoading?: boolean;
@@ -126,6 +128,7 @@ export default function EntityList<T>(props: Props<T>) {
     showExport,
     showSelector = true,
     collectionQuery,
+    setCollection,
     showAllHeader = true,
     children,
   } = props;
@@ -760,7 +763,14 @@ export default function EntityList<T>(props: Props<T>) {
 
         {total > 0 && (
           <div className="flex justify-end p-2">
-            {/* Add your pagination component here */}
+            <ClientPaginationComponent
+              total={total}
+              title={title}
+              collection={collection?.[0]?.collection}
+              onPaginationChange={(skip: number, top: number) =>
+                onPaginationChange(skip, top)
+              }
+            />
           </div>
         )}
       </div>

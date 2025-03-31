@@ -185,6 +185,7 @@ export default function StaffListPage({ children }: Props) {
         newButtonText="New Staff"
         total={staffs?.data?.count}
         collectionQuery={collection}
+        setCollection={setCollection}
         itemsLoading={staffs?.isLoading || staffs?.isFetching}
         config={config}
         items={data}
@@ -194,8 +195,8 @@ export default function StaffListPage({ children }: Props) {
         pageSize={[10, 20, 50]}
         onShowSelector={(e) => setCheck(e)}
         onPaginationChange={(skip: number, top: number) => {
-          const after = (skip - 1) * top;
-          setCollection({ ...collection, skip: after, top: top });
+          // const after = (skip - 1) * top;
+          setCollection({ ...collection, skip: skip, top: top });
         }}
         onSearch={(data: any) => {
           if (data === "") {
