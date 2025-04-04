@@ -614,7 +614,7 @@ export default function EntityList<T>(props: Props<T>) {
                     onDoubleClick={() => {
                       if (setting?.showDetail) {
                         router.push(
-                          `${setting?.detailUrl}/${
+                          `${setting?.rootUrl}/${setting?.detailUrl}/${
                             item?.deletedAt ? "archived" : "active"
                           }/${
                             !Array.isArray(setting?.identity)

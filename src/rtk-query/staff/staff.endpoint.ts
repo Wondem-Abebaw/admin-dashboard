@@ -1,7 +1,7 @@
 export const STAFF_ENDPOINT = {
-  list: `${process.env.NEXT_PUBLIC_API_BASE_URL}/employers/get-employers`,
+  list: `${process.env.NEXT_PUBLIC_API_BASE_URL}/staffs/get-staffs`,
   create: `${process.env.NEXT_PUBLIC_API_BASE_URL}/staffs/create-staff`,
-  detail: `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/get-user`,
+  detail: `${process.env.NEXT_PUBLIC_API_BASE_URL}/staffs/get-staff`,
   update: `${process.env.NEXT_PUBLIC_API_BASE_URL}/staffs/update-staff`,
   delete: `${process.env.NEXT_PUBLIC_API_BASE_URL}/staffs/delete-staff`,
   archive: `${process.env.NEXT_PUBLIC_API_BASE_URL}/staffs/archive-staff`,

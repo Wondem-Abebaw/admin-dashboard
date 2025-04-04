@@ -173,7 +173,6 @@ export const ethiopianCities = [
   { label: "Bako", value: "Bako" },
   { label: "Assbe Tefera", value: "Assbe Tefera" },
   { label: "Asaita", value: "Asaita" },
-  { label: "Assosa", value: "Assosa" },
   { label: "Ä€reka", value: "Ä€reka" },
   { label: "Arba Minch", value: "Arba Minch" },
   { label: "Axum", value: "Axum" },
